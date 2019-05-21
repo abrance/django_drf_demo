@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+# STATIC_DIR =
 
 # Application definition
 
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'books.apps.BooksConfig',
+    'image_app.apps.ImageAppConfig',
 ]
 
 MIDDLEWARE = [
@@ -81,8 +84,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'HOST': '127.0.0.1',
         'PORT': 3306,
+        # 'USER': 'root',
+        # 'PASSWORD': 'mysql',
         'USER': 'root',
-        'PASSWORD': 'mysql',
+        'PASSWORD': 'imba',
         'NAME': 'drf_demo',
     }
 }
@@ -125,3 +130,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'    # 此次加入的变量MEDIA_URL
+MEDIA_ROOT = MEDIA_DIR   # 加入的变量MEDIA_ROOT
+
