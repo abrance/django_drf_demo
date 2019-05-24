@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>images</title>
+    <script src="src/vue.js"></script>
+    <script src="src/axios.js"></script>
+</head>
+<body>
+<div id="app">
+    <input type="button" value="获得所有图片" @click="show_images">
+    <table>
+        <div>
+            <tr v-for="img in images">
+                <td>{{ img.id }}</td>
+                <td>{{ img.img }}</td>
+                <td>{{ img.img_pub_date }}</td>
+                <td>{{ img.img_read }}</td>
+                <td>{{ img.img_good_star }}</td>
+            </tr>
+            <div id="show_img"></div>
+        </div>
+    </table>
+</div>
+</body>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            images: [],
+        },
+        methods: {
+            show_images: function () {
+                axios.get('http://127.0.0.1:8000/image_app/')
+                    .then(response => {
+                    this.images = response.data;
+                }).catch(
+                    error => {
+                        console.log(error.response.data);
+                })
+            }
+        }
+    })
+</script>
+
+</html>

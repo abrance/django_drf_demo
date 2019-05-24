@@ -2,7 +2,10 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
+from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import GenericAPIView, DestroyAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -10,6 +13,11 @@ from rest_framework.permissions import IsAuthenticated
 from image_app.models import ImageInfo, ImageSearchContext
 from image_app.serializers import ImageInfoSerializer, ImageSearchContextSerializer
 
+
+class StandardResultPagination(PageNumberPagination):
+    page_size = 3
+    page_size_query_param = 'page_size'
+    max_page_size = 5
 
 # class ImageInfoViewSet(ModelViewSet):
 #     queryset = ImageInfo.objects.all()
@@ -75,9 +83,14 @@ from image_app.serializers import ImageInfoSerializer, ImageSearchContextSeriali
 class ImageViewSet(ModelViewSet):
     serializer_class = ImageInfoSerializer
     queryset = ImageInfo.objects.all()
+    # authentication_classes = [SessionAuthentication]    # 视图设置，只用设置一种就够了
+    # permission_classes = [IsAuthenticated]
+    # throttle_classes = [AnonRateThrottle]       # 局部限流
+    # filter_backends = [OrderingFilter]
+    # pagination_class = StandardResultPagination
 
-    authentication_classes = [SessionAuthentication]
-    permission_classes = [IsAuthenticated]
+    # 可以带过滤参数了 image_app/?img_read=10
+    # filter_field = ('img_read', 'img_pub_date')
 
     @action(methods=['get'], detail=False)
     def favorite_img(self, request):

@@ -42,9 +42,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'books.apps.BooksConfig',
     'image_app.apps.ImageAppConfig',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # 此处为注册的中间件
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -112,10 +114,37 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',  # session认证
-        'rest_framework.authentication.BasicAuthentication',   # 基本认证
-    )
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework.authentication.SessionAuthentication',  # session认证
+    #     'rest_framework.authentication.BasicAuthentication',   # 基本认证
+    # )     # 全局认证设置，这里指去admin站点进行登录
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',  # 允许认证用户
+    # )     # 全局权限设置
+
+    # 全局设置限流
+    # 'DEFAULT_THROTTLE_CLASSES': (
+    #     # 针对未登录(匿名)用户的限流控制类
+    #     'rest_framework.throttling.AnonRateThrottle',
+    #     # 针对登录(认证)用户的限流控制类
+    #     'rest_framework.throttling.UserRateThrottle'
+    # ),
+    # # 指定限流频次
+    # 'DEFAULT_THROTTLE_RATES': {
+    #     # 认证用户的限流频次
+    #     'user': '5/minute',
+    #     # 匿名用户的限流频次
+    #     'anon': '3/minute',
+    # },
+
+    # 'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    #
+    # # 分页
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 5,     # 每页数目
+    #
+    # # 异常处理
+    # 'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
 }
 
 # Internationalization
@@ -140,3 +169,5 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'    # 此次加入的变量MEDIA_URL
 MEDIA_ROOT = MEDIA_DIR   # 加入的变量MEDIA_ROOT
 
+CORS_ORIGIN_ALLOW_ALL=True      # cors跨域请求
+CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
